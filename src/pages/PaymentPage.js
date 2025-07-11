@@ -11,8 +11,8 @@ export default function PaymentPage() {
   const orderType = sessionStorage.getItem('orderType') || 'Dining';
   const total =
     orderType === 'Parcel'
-      ? sessionStorage.getItem('parcelTotal') || 0
-      : sessionStorage.getItem('diningTotal') || 0;
+      ? Number(sessionStorage.getItem('parcelTotal') || 0)
+      : Number(sessionStorage.getItem('diningTotal') || 0);
 
   const name = sessionStorage.getItem('name') || '';
   const mobile = sessionStorage.getItem('mobile') || '';
@@ -25,34 +25,36 @@ export default function PaymentPage() {
       mobile,
       table: orderType === 'Dining' ? table : null,
       gpayNumber,
-      total,
+      total, // Already converted to Number above
       orderType,
       dishes: selectedDishes,
     };
 
+    console.log('📦 Sending orderData:', orderData); // Debug output
+
     try {
-  const response = await fetch('https://food-ordering-backend-8yg3.onrender.com/api/orders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(orderData),
-  });
+      const response = await fetch('https://food-ordering-backend-8yg3.onrender.com/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
 
-  const result = await response.json();  // Always parse the response for debugging
+      const result = await response.json();
 
-  if (response.ok) {
-    console.log('✅ Order saved:', result);
-    navigate('/success');
-  } else {
-    console.error('❌ Server error:', result);
-    alert('Payment failed! Please try again.');
-  }
-} catch (error) {
-  console.error('❌ Network or Fetch Error:', error);
-  alert('Something went wrong!');
-}
-  }
+      if (response.ok) {
+        console.log('✅ Order saved:', result);
+        navigate('/success');
+      } else {
+        console.error('❌ Server error:', result);
+        alert('Payment failed! Please try again.');
+      }
+    } catch (error) {
+      console.error('❌ Network or Fetch Error:', error);
+      alert('Something went wrong!');
+    }
+  };
 
   return (
     <div
