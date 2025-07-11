@@ -1,3 +1,4 @@
+// DiningDetails.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/background.jpg';
@@ -11,9 +12,9 @@ export default function DiningDetails() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedName = sessionStorage.getItem('diningName');
-    const storedMobile = sessionStorage.getItem('diningMobile');
-    const storedTable = sessionStorage.getItem('selectedTable');
+    const storedName = sessionStorage.getItem('name');
+    const storedMobile = sessionStorage.getItem('mobile');
+    const storedTable = sessionStorage.getItem('table');
 
     if (storedName) setName(storedName);
     if (storedMobile) setMobile(storedMobile);
@@ -35,17 +36,18 @@ export default function DiningDetails() {
 
     setError('');
 
-    sessionStorage.setItem('diningName', name);
-    sessionStorage.setItem('diningMobile', mobile);
+    // ✅ Unified keys
+    sessionStorage.setItem('name', name);
+    sessionStorage.setItem('mobile', mobile);
+    sessionStorage.setItem('table', selectedTable);
     sessionStorage.setItem('orderType', 'Dining');
-    sessionStorage.setItem('selectedTable', selectedTable);
 
     navigate('/confirmation');
   };
 
   const handleTableRedirect = () => {
-    sessionStorage.setItem('diningName', name);
-    sessionStorage.setItem('diningMobile', mobile);
+    sessionStorage.setItem('name', name);
+    sessionStorage.setItem('mobile', mobile);
     navigate('/tableselection');
   };
 
@@ -58,24 +60,9 @@ export default function DiningDetails() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         minHeight: '100vh',
-        paddingBottom: '30px',
       }}
     >
-      <h2
-        className="form-heading"
-        style={{
-          fontFamily: "'Rubik', sans-serif",
-          fontWeight: '700',
-          fontSize: '32px',
-          color: 'black',
-          textAlign: 'center',
-          marginBottom: '20px',
-        }}
->
-  DINING DETAILS
-</h2>
-
-
+      <h2 className="form-heading" style={{ textAlign: 'center' }}>DINING DETAILS</h2>
 
       <div className="input-box">
         <div className="form-container">
@@ -93,39 +80,17 @@ export default function DiningDetails() {
             onChange={(e) => setMobile(e.target.value)}
             required
           />
-          {error && (
-            <p style={{ color: 'red', fontSize: '14px', marginTop: '5px' }}>{error}</p>
-          )}
+          {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
         </div>
       </div>
 
-      <div
-  className="cloud-container"
-  onClick={handleTableRedirect}
-  style={{ cursor: 'pointer' }}
->
-  <div
-    className="cloud-heading"
-    style={{
-      fontFamily: "'Cinzel Decorative', cursive",
-      fontSize: '24px',
-      fontWeight: 'bold',
-      color: '#000',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '10px',
-      letterSpacing: '1px',
-    }}
-  >
-    🍽️ SEE AVAILABLE TABLES
-  </div>
-</div>
+      <div className="cloud-container" onClick={handleTableRedirect} style={{ cursor: 'pointer' }}>
+        <div className="cloud-heading" style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          🍽️ SEE AVAILABLE TABLES
+        </div>
+      </div>
 
-
-      <button className="submit-button" onClick={handleSubmit}>
-        CONFIRM ORDER
-      </button>
+      <button className="submit-button" onClick={handleSubmit}>CONFIRM ORDER</button>
     </div>
   );
 }

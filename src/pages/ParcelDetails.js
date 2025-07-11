@@ -1,3 +1,4 @@
+// ParcelDetails.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from '../assets/background.jpg';
@@ -62,11 +63,12 @@ export default function ParcelDetails() {
     const selectedDishes = allDishes.filter((dish) => selectedDishIds.includes(dish.id));
     const total = selectedDishes.reduce((sum, dish) => sum + dish.price, 0);
 
+    // ✅ Unified session keys
     sessionStorage.setItem('orderType', 'Parcel');
-    sessionStorage.setItem('parcelName', name);
-    sessionStorage.setItem('parcelMobile', mobile);
+    sessionStorage.setItem('name', name);
+    sessionStorage.setItem('mobile', mobile);
     sessionStorage.setItem('parcelTotal', total);
-    sessionStorage.setItem('parcelDishes', JSON.stringify(selectedDishes));
+    sessionStorage.setItem('selectedDishes', JSON.stringify(selectedDishes));
 
     navigate('/parcelconfirmation');
   };
@@ -82,20 +84,7 @@ export default function ParcelDetails() {
         minHeight: '100vh',
       }}
     >
-      <h2
-        className="form-heading"
-        style={{
-          fontFamily: "'Rubik', sans-serif",
-          fontWeight: '700',
-          fontSize: '32px',
-          color: 'black',
-          textAlign: 'center',
-          marginBottom: '20px',
-        }}
->
-  PARCEL DETAILS
-</h2>
-
+      <h2 className="form-heading" style={{ textAlign: 'center' }}>PARCEL DETAILS</h2>
 
       <div className="input-box">
         <form className="form-container" onSubmit={handleSubmit}>
@@ -113,14 +102,8 @@ export default function ParcelDetails() {
             onChange={(e) => setMobile(e.target.value)}
             required
           />
-          {error && (
-            <p style={{ color: 'red', marginTop: '5px', fontSize: '14px' }}>
-              {error}
-            </p>
-          )}
-          <button type="submit" className="submit-button">
-            CONFIRM ORDER
-          </button>
+          {error && <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>}
+          <button type="submit" className="submit-button">CONFIRM ORDER</button>
         </form>
       </div>
     </div>
