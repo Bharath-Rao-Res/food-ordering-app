@@ -12,7 +12,7 @@ import AdminOrders from './components/AdminOrders';
 
 function App() {
   return (
-    <Router>
+    <Router  basename="/food-ordering-app">
       <Routes>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/menu" element={<MenuPage />} />
