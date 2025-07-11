@@ -31,25 +31,28 @@ export default function PaymentPage() {
     };
 
     try {
-      // 🔁 Replace with your actual backend Render URL
-      const response = await fetch('https://food-ordering-backend-8yg3.onrender.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      });
+  const response = await fetch('https://food-ordering-backend-8yg3.onrender.com/api/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(orderData),
+  });
 
-      if (response.ok) {
-        navigate('/success');
-      } else {
-        alert('Payment failed! Please try again.');
-      }
-    } catch (error) {
-      console.error('Error saving order:', error);
-      alert('Something went wrong!');
-    }
-  };
+  const result = await response.json();  // Always parse the response for debugging
+
+  if (response.ok) {
+    console.log('✅ Order saved:', result);
+    navigate('/success');
+  } else {
+    console.error('❌ Server error:', result);
+    alert('Payment failed! Please try again.');
+  }
+} catch (error) {
+  console.error('❌ Network or Fetch Error:', error);
+  alert('Something went wrong!');
+}
+  }
 
   return (
     <div
